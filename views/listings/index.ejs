@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wander_lust</title>
+</head>
+<body>
+    <div class="main">
+        <h1>all listing</h1>
+        <form method="GET" action="/listing/create" >
+            <button>create new list</button>
+        </form>
+        <ul>
+            <% listData.forEach((val)=>{ %>
+             <a href="http://localhost:3000/listing/<%=val._id%>"><li><%= val.title%></li></a> 
+           <% }) %>
+        </ul>
+    </div>
+</body>
+</html>
