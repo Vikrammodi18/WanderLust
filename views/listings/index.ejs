@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wander_lust</title>
-</head>
-<body>
+<% layout('/layout/boilerPlate') %>
     <div class="main">
         <h1>all listing</h1>
-        <form method="GET" action="/listing/create" >
+        
+        <!-- <form method="GET" action="/listing/create" >
             <button>create new list</button>
-        </form>
-        <ul>
+        </form> -->
+        <br>
+        <hr>
+       
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1">
             <% listData.forEach((val)=>{ %>
-             <a href="http://localhost:3000/listing/<%=val._id%>"><li><%= val.title%></li></a> 
-           <% }) %>
-        </ul>
+                <a href="http://localhost:3000/listing/<%=val._id%>" class="listCardLink">
+                <div class="card col" style="width: 16rem;">
+                    
+                    <img src="<%=val.image%>" class="card-img-top" alt="listing_image" style="height:10rem">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                      <p class="card-text">
+                       <b> <%=val.title%> <br> </b>
+                        &#8377; <%=val.price.toLocaleString("en-IN")%> /night
+                      </p>
+                    </div>
+        </div>
+        </a>
+        <% }) %>
+        </div>
+    
     </div>
 </body>
-</html>
