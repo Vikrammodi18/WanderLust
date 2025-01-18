@@ -56,12 +56,12 @@ app.delete('/listing/:id',async (req,res)=>{
     res.redirect('/listing')
 })
 //update
-app.put('/listing/:id',(req,res)=>{
+app.put('/listing/:id',async (req,res)=>{
     const {id} = req.params
     const updatedList = req.body;
-    Listing.updateOne({_id:id},updatedList).then((res)=>console.log("sucessfull"))
+    Listing.updateOne({_id:id},updatedList).then((res)=>res.redirect('/listing'))
     .catch((err)=>console.log(err))
-    res.redirect('/listing')
+    
 })
 
 

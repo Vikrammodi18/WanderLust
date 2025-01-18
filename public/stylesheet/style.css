@@ -45,7 +45,7 @@ color: #222222
 .card-img-top{
     width:100% !important;
     border-radius:1rem !important;
-    object-fit: cover;
+    object-fit: cover !important;
 
 }
 .card-body{
@@ -65,4 +65,9 @@ color: #222222
 
 .form-label {
     margin-bottom: .1rem !important;
+}
+
+.editbtn{
+    text-decoration: none;
+    color:rgb(35, 35, 36);
 }

@@ -1,6 +1,15 @@
 <% layout('/layout/boilerplate') %>
 <body>
     <h4>list Details</h4>
+
+    <div class="card" style="width: 18rem;">
+        <img src="<%=data.image%>" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+
+
     <ul>
         <li><%=data.title%></li>
         <li><%=data.description%></li>
@@ -8,6 +17,6 @@
         <li><%=data.location%></li>
         <li><%=data.country%></li>
     </ul>
-    <a href="http://localhost:3000/listing/<%=data._id%>/edit">Edit your details</a>
-    <form action="/listing/<%=data._id%>?_method=DELETE" method="POST"><button>Delete</button></form>
+    <a href="http://localhost:3000/listing/<%=data._id%>/edit" class="editbtn">Edit your details</a> <br>
+    <form action="/listing/<%=data._id%>?_method=DELETE" method="POST"><button class="btn btn-dark">Delete</button></form>
 </body>

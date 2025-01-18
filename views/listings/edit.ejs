@@ -1,11 +1,32 @@
 <% layout('layout/boilerPlate') %>
-    <form action="/listing/<%=list._id%>?_method=PUT" method="POST">
-        <h1>Edit your details</h1>
-        <input type="text" name="title" id="" value="<%=list.title%>" placeholder="Enter title">  <br>
-        <input type="text" name="image" id="" value="<%=list.image%>" placeholder="Enter image url"> <br>
-        <input type="text" name="description" id="" value="<%=list.description %>" placeholder="Enter description"> <br>
-        <input type="number" name="price" id="" value="<%=list.price %> placeholder="Enter price"> <br>
-        <input type="text" name="location" id="" value="<%=list.location %> placeholder="Enter location"> <br>
-        <input type="text" name="country" id="" value="<%=list.country %> placeholder="Enter country"> <br>
-        <button>Create</button>
+<div class="row">
+    <div class="col-8 offset-2">
+<h1>Edit your details</h1>
+            <form action="/listing/<%=list._id%>?_method=PUT" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+             <input type="text" name="title" id="" value="<%=list.title%>" class="form-control" placeholder="Enter title">
+            </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" name="description" id="" class="form-control" value="<%=list.description %>" placeholder="Enter description"></div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image url</label>
+            <input type="text" name="image" id="" class="form-control" value="<%=list.image%>" placeholder="Enter image url"></div>
+            <div class="row">
+            <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="price" id="" class="form-control" value="<%=list.price%>" placeholder="Enter price"></div>
+            <div class="mb-3 col-md-8">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" name="country" id="" class="form-control" value="<%=list.country %>" placeholder="Enter country"></div>
+            </div>
+                <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="location" id="" class="form-control" value="<%=list.location %>" placeholder="Enter location"></div>
+       
+         <br>
+       
+        <button class="btn btn-dark">Save</button>
     </form>
+</div>
