@@ -30,7 +30,7 @@ color: #222222
 }
 .f_info{
     text-align: center;
-    height:8rem;
+    height:7rem;
     background-color: rgb(182, 182, 182);
     display:flex;
     flex-wrap: wrap;
@@ -52,6 +52,7 @@ color: #222222
     padding:0 !important;
 }
 .listCardLink{
+    width: inherit;
     text-decoration: none;
     
 }
@@ -70,4 +71,15 @@ color: #222222
 .editbtn{
     text-decoration: none;
     color:rgb(35, 35, 36);
+}
+
+.show-img{
+    height:48vh;
+    object-fit: cover !important;
+    
+}
+.show-btns{
+    display: flex;
+    justify-content: space-between;
+/* border: solid red 2px; */
 }

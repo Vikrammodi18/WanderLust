@@ -59,9 +59,8 @@ app.delete('/listing/:id',async (req,res)=>{
 app.put('/listing/:id',async (req,res)=>{
     const {id} = req.params
     const updatedList = req.body;
-    Listing.updateOne({_id:id},updatedList).then((res)=>res.redirect('/listing'))
-    .catch((err)=>console.log(err))
-    
+   await Listing.updateOne({_id:id},updatedList)
+    res.redirect('/listing')
 })
 
 
