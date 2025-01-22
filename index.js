@@ -23,13 +23,15 @@ async function main(){
     await mongoose.connect(Mongo_Url)
 }
 
+
+
 app.get("/",(req,res)=>{
     res.send("i am home page:")
 })
 //listing
 app.get('/listing',async (req,res)=>{
    const listData = await Listing.find({})
-   res.render('listings/index',{listData})
+   res.render('listings/index',{listData}) 
 })
 //create new
 app.get('/listing/create',(req,res)=>{
@@ -51,7 +53,6 @@ app.get('/listing/:id/edit',async (req,res)=>{
 //delete
 app.delete('/listing/:id',async (req,res)=>{
     const {id} = req.params
-    
     await Listing.findByIdAndDelete(id)
     res.redirect('/listing')
 })
