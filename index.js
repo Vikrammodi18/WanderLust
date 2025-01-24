@@ -6,11 +6,13 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const wrapAsync = require("./utils/wrapAsync")
 const ExpressError = require('./utils/ExpressError')
+const listingSchema = require('./schema.js')
 const app = express()
 
 Mongo_Url = "mongodb://127.0.0.1:27017/wonderlust"
 
 app.use(methodOverride('_method'))
+app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.set("view engine","ejs")
 app.set('views',path.join(__dirname,'views'))
@@ -22,9 +24,6 @@ main().then((res)=>{console.log("connected to db")})
 async function main(){
     await mongoose.connect(Mongo_Url)
 }
-
-
-
 
 app.get("/",(req,res)=>{
     res.send("i am home page:")
@@ -40,10 +39,16 @@ app.get('/listing/create', (req,res)=>{
 })
 //post new listing
 app.post('/listing',wrapAsync( async (req,res,next)=>{
-        if(!req.body.listing){
-         throw new ExpressError(400,"send valid data for listing")
-        }
-        let listing = req.body;
+    //    console.log(req.body.listing);
+        
+       const result = listingSchema.validate(req.body);
+        
+       if(result.error){
+        throw new ExpressError(400,result.error)
+       }
+        
+        let listing = req.body.listing;
+        // console.log("only req.body:-",listing)
         const list = new Listing(listing)
         await list.save()
        res.redirect('/listing')
@@ -71,7 +76,6 @@ app.put('/listing/:id',wrapAsync( async (req,res)=>{
 
 //details
 app.get('/listing/:id',wrapAsync( async (req,res)=>{
-    
     const {id}= req.params;
     const listingDetails = await Listing.findById(id)
     res.render('listings/details',{data:listingDetails})
@@ -81,7 +85,7 @@ app.all("*",(req,res,next)=>{
 })
 app.use((err,req,res,next)=>{
     let{status=500,message ="something went wrong"} = err
-    res.render('listings/error')
+    res.status(status).render('listings/error',{message})
 })
 
 app.listen(3000,()=>{
