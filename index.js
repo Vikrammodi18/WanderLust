@@ -25,9 +25,13 @@ async function main(){
     await mongoose.connect(Mongo_Url)
 }
 
-app.get("/",(req,res)=>{
-    res.send("i am home page:")
-})
+const listingValidate = (req,res,next)=>{
+   const {error} =  listingSchema.validate(req.body);
+    if(error){
+        throw new ExpressError(400,error)
+    }
+    next()
+}
 //listing
 app.get('/listing',wrapAsync(async (req,res)=>{
    const listData = await Listing.find({})
@@ -38,15 +42,9 @@ app.get('/listing/create', (req,res)=>{
     res.render('listings/create')
 })
 //post new listing
-app.post('/listing',wrapAsync( async (req,res,next)=>{
+app.post('/listing',listingValidate,wrapAsync( async (req,res,next)=>{
     //    console.log(req.body.listing);
-        
-       const result = listingSchema.validate(req.body);
-        
-       if(result.error){
-        throw new ExpressError(400,result.error)
-       }
-        
+       
         let listing = req.body.listing;
         // console.log("only req.body:-",listing)
         const list = new Listing(listing)
@@ -66,7 +64,7 @@ app.delete('/listing/:id',wrapAsync( async (req,res)=>{
     res.redirect('/listing')
 }))
 //update
-app.put('/listing/:id',wrapAsync( async (req,res)=>{
+app.put('/listing/:id',listingValidate,wrapAsync( async (req,res)=>{
     const {id} = req.params
     const updatedList = req.body;
    await Listing.updateOne({_id:id},updatedList)
