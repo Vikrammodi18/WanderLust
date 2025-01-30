@@ -6,7 +6,8 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const wrapAsync = require("./utils/wrapAsync")
 const ExpressError = require('./utils/ExpressError')
-const listingSchema = require('./schema.js')
+const {listingSchema,reviewSchema } = require('./schema.js')
+const Review = require('./models/reviews.js')
 const app = express()
 
 Mongo_Url = "mongodb://127.0.0.1:27017/wonderlust"
@@ -26,12 +27,21 @@ async function main(){
 }
 
 const listingValidate = (req,res,next)=>{
-   const {error} =  listingSchema.validate(req.body);
+    const {error} = listingSchema.validate(req.body)
     if(error){
         throw new ExpressError(400,error)
     }
     next()
 }
+
+const reviewValidate = (req,res,next)=>{
+    const{error} = reviewSchema.validate(req.body)
+    if(error){
+        throw new ExpressError(400,error)
+    }
+    next()
+}
+
 //listing
 app.get('/listing',wrapAsync(async (req,res)=>{
    const listData = await Listing.find({})
@@ -43,10 +53,8 @@ app.get('/listing/create', (req,res)=>{
 })
 //post new listing
 app.post('/listing',listingValidate,wrapAsync( async (req,res,next)=>{
-    //    console.log(req.body.listing);
-       
+     
         let listing = req.body.listing;
-        // console.log("only req.body:-",listing)
         const list = new Listing(listing)
         await list.save()
        res.redirect('/listing')
@@ -67,16 +75,33 @@ app.delete('/listing/:id',wrapAsync( async (req,res)=>{
 app.put('/listing/:id',listingValidate,wrapAsync( async (req,res)=>{
     const {id} = req.params
     const updatedList = req.body;
-   await Listing.updateOne({_id:id},updatedList)
+   await Listing.updateOne({_id:id},updatedList.listing)
     res.redirect('/listing')
 }))
-
-
 //details
 app.get('/listing/:id',wrapAsync( async (req,res)=>{
     const {id}= req.params;
-    const listingDetails = await Listing.findById(id)
+    const listingDetails = await Listing.findById(id).populate("rating")
     res.render('listings/details',{data:listingDetails})
+}))
+//review
+app.post('/listing/:id/review',reviewValidate,wrapAsync(async (req,res)=>{
+
+    const{id} = req.params
+    const list = await Listing.findById(id)
+    const review1 = new Review(req.body.review)
+    list.rating.push(review1)
+    await review1.save()
+    await list.save()
+    res.redirect(`/listing/${list._id}`)
+   
+}))
+//delete review
+app.delete('/listing/:id/review/:reviewId',wrapAsync(async (req,res)=>{
+    const {id,reviewId} = req.params;
+    await Listing.findByIdAndUpdate(id,{$pull:{rating:reviewId}})
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listing/${id}`)
 }))
 app.all("*",(req,res,next)=>{
     next(new ExpressError(404,"page not found"))
