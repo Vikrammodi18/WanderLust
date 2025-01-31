@@ -33,8 +33,6 @@ const listSchema = new mongoose.Schema({
     ],
 })
 
-
-
 listSchema.post('findOneAndDelete', async (listing)=>{
     if(listing){
         await Review.deleteMany({_id:{$in:listing.rating}})

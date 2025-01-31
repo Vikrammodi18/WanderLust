@@ -27,7 +27,7 @@
 <hr>
 <div class="col-8 offset-3 mb-3">
   <h4>Rate us.</h4>
-  <form action="/listing/<%=data._id%>/review" method="POST" class="needs-reviewidation" noreviewidate>
+  <form action="/listing/<%=data._id%>/review" method="POST" class="needs-validation" novalidate>
     <div class="mb-3">
       <label for="rate" class="form-label"></label>
       <input type="range" name="review[rating]" id="rate" class="form-control form-range" min="1" max="5"  required>
