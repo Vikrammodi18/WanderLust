@@ -27,18 +27,21 @@ router.get('/',wrapAsync(async (req,res)=>{
          let listing = req.body.listing;
          const list = new Listing(listing)
          await list.save()
+         req.flash("success","New Listing Created")
         res.redirect('/listing')
  }))
  // //edit
  router.get('/:id/edit',wrapAsync( async (req,res)=>{
      const {id} = req.params;
     const list = await Listing.findById(id)
+    
     res.render('listings/edit',{list})
  }))
  //delete
  router.delete('/:id',wrapAsync( async (req,res)=>{
      const {id} = req.params
      await Listing.findByIdAndDelete(id)
+     req.flash("success","Listing deleted")
      res.redirect('/listing')
  }))
  //update
@@ -46,6 +49,7 @@ router.get('/',wrapAsync(async (req,res)=>{
      const {id} = req.params
      const updatedList = req.body;
     await Listing.updateOne({_id:id},updatedList.listing)
+    req.flash("success","listing updated!")
      res.redirect('/listing')
  }))
  //details
