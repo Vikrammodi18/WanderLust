@@ -56,6 +56,10 @@ router.get('/',wrapAsync(async (req,res)=>{
  router.get('/:id',wrapAsync( async (req,res)=>{
      const {id}= req.params;
      const listingDetails = await Listing.findById(id).populate("rating")
+     if(!listingDetails){
+        req.flash("error","listing not found")
+        res.redirect('/listing')
+     }
      res.render('listings/details',{data:listingDetails})
  }))
  module.exports = router
