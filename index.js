@@ -6,8 +6,12 @@ const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const listingRouter = require('./route/listing')
 const reviewRouter = require('./route/review')
+const userRouter = require('./route/user')
 const session = require('express-session')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const flash = require('connect-flash')
+const User = require('./models/user')
 const app = express()
 
 Mongo_Url = "mongodb://127.0.0.1:27017/wonderlust"
@@ -33,6 +37,13 @@ app.use(express.static(path.join(__dirname,'/public'))) //use public directory f
 
 app.use(session(sessionOptions))//create session using middleware
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 main().then((res)=>{console.log("connected to db")})
 .catch((err)=>console.log(err))
 
@@ -47,10 +58,20 @@ app.use((req,res,next)=>{
     next()
 })
 
+
+// app.use('/demo', async (req,res)=>{
+//     let fakeUser = new User({
+//         email:"student@gmail.com",
+//         username:"delta-student"
+//     })
+//     let registeredUser = await User.register(fakeUser,"student123@");
+//     res.send(registeredUser)
+// })
+
 //create two router for separate request
 app.use('/listing',listingRouter)
 app.use('/listing/:id/review',reviewRouter)
-
+app.use('/',userRouter)
 //handling custom errors using Express-error
 app.all("*",(req,res,next)=>{
     next(new ExpressError(404,"page not found"))
